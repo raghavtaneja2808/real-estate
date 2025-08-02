@@ -7,6 +7,7 @@ import RealScoreSection from '../components/RealScoreSection';
 import FAQ from '../components/FAQ';
 import Footer from '../components/Footer';
 import BuyAny from '../components/BuyAny';
+import Attention from '../components/Attention';
 
 // --- DATA --- //
 // You can move this data to a separate file later if you want
@@ -87,6 +88,7 @@ const LandingPage = () => {
                 </div>
                 <LatestListings cities={listingsData.cities} listings={listingsData.listings} />
                 <BlogSection blogPosts={blogPostsData} />
+                <Attention/>
                 <RealScoreSection />
                 <FAQ faqData={faqData} />
             </main>
