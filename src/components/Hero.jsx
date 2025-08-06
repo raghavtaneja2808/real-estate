@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { ArrowRight } from './Icons';
 
 const Hero = () => {
@@ -25,9 +26,11 @@ const Hero = () => {
               <p className="font-semibold text-rovio300">Buy real estate with crypto—from any seller.</p>
             </div>
             <div className="flex flex-row items-center gap-4 pt-5">
+              <Link to='/get_started'>
               <a href="#" className="flex items-center gap-2 px-5 py-3 text-base font-medium text-black transition-all bg-white rounded-full hover:bg-gray-200">
                 Get started <ArrowRight />
               </a>
+              </Link>
               <a href="#" className="flex items-center gap-2 px-5 py-3 text-base font-medium transition-all text-violet-100 bg-black/20 rounded-full hover:bg-black/40">
                 Learn more <ArrowRight />
               </a>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Logo, ArrowRight, MenuIcon } from './Icons';
+import { Link } from 'react-router-dom';
 
 const navLinks = ["Buy", "Sell", "Agents", "Contact", "Blog", "About"];
 
@@ -21,9 +22,10 @@ const Header = () => {
           </div>
         </div>
         <div className="hidden md:block">
-            <a href="#" className="flex items-center gap-2 bg-white text-black font-medium px-5 py-2 rounded-full hover:bg-gray-200 transition-colors">
+          <Link to='/get_started' > <a href="#" className="flex items-center gap-2 bg-white text-black font-medium px-5 py-2 rounded-full hover:bg-gray-200 transition-colors">
               Get started <ArrowRight className="text-black" />
             </a>
+            </Link>
         </div>
         <button className="md:hidden text-ink" onClick={() => setIsMenuOpen(!isMenuOpen)}>
           <MenuIcon className="h-6 w-6" />
