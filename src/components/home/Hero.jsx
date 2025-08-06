@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const CircularText = () => (
     <div className="absolute top-1/2 left-full -translate-y-1/2 ml-12 hidden lg:block">
@@ -50,9 +51,10 @@ const Hero = () => {
                             <a href="#" className="px-6 py-3 border border-gray-600 rounded-md text-center hover:bg-gray-800 transition-colors">
                                 Learn More
                             </a>
-                            <a href="#" className="px-6 py-3 bg-violet-600 rounded-md text-center hover:bg-violet-700 transition-colors">
+                            <Link to='/properties' className='px-6 py-3 bg-violet-600 rounded-md text-center hover:bg-violet-700 transition-colors'>
                                 Browse Properties
-                            </a>
+                        
+                            </Link>
                         </div>
 
                         {/* Stats */}

@@ -4,6 +4,8 @@ import Hero from '../components/home/Hero';
 import ServicesSection from '../components/home/ServicesSection';
 import FeaturedProperties from '../components/home/FeaturedProperties';
 import Testimonials from '../components/home/Testimonials';
+import FAQ from '../components/home/FAQ';
+import Footer from '../components/home/Footer';
 
 const HomePage = () => {
     return (
@@ -28,6 +30,8 @@ const HomePage = () => {
                 <ServicesSection/>
                 <FeaturedProperties/>
                 <Testimonials/>
+                <FAQ/>
+                <Footer/>
             </main>
         </div>
     );

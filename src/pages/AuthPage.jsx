@@ -63,13 +63,14 @@ const Input = ({ type, placeholder, id, value, onChange }) => (
     />
 );
 
-const Button = ({ children, onClick }) => (
-    <button 
-        onClick={onClick}
-        className="w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-lg hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-black transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
+// --- Updated Button component to use Link for navigation ---
+const Button = ({ children, to }) => (
+    <Link 
+        to={to}
+        className="block text-center w-full py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-lg hover:from-violet-700 hover:to-purple-700 active:from-violet-800 active:to-purple-800 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:ring-offset-2 focus:ring-offset-black transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
     >
         {children}
-    </button>
+    </Link>
 );
 
 // --- Sign Up Form Component ---
@@ -110,7 +111,7 @@ const SignUpForm = () => {
                     onChange={handleChange('password')}
                 />
             </div>
-            <Button>Create Account</Button>
+            <Button to="/home">Create Account</Button>
         </div>
     );
 };
@@ -150,7 +151,7 @@ const SignInForm = () => {
                     Forgot Password?
                 </a>
             </div>
-            <Button>Sign In</Button>
+            <Button to="/home">Sign In</Button>
         </div>
     );
 };
@@ -174,13 +175,12 @@ const AuthPage = () => {
 
             {/* Top Navigation */}
             <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20">
-                <Link to='/'>
-                <a href="/" className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors group">
+                <Link to='/' className="flex items-center gap-3 text-gray-300 hover:text-white transition-colors group">
                     <div className="p-2 bg-gray-900/50 rounded-full border border-gray-700 group-hover:border-violet-500 transition-colors backdrop-blur-sm">
                        <BackArrowIcon />
                     </div>
-                </a>
                 </Link>
+                
                 {/* Logo in top center */}
                 <div className="absolute left-1/2 transform -translate-x-1/2">
                     <LogoIcon className="w-12 h-8" />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Using the correct BlockEstate logo
@@ -20,7 +21,12 @@ const CloseIcon = () => (
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const navLinks = ["Home", "About Us", "Properties", "Services"];
+    const navLinks = [
+        { name: "Home", path: "/home" },
+        { name: "About Us", path: "/about" },
+        { name: "Properties", path: "/properties" },
+        { name: "Services", path: "/services" }
+    ];
 
     const menuVariants = {
         hidden: { opacity: 0, y: -20 },
@@ -39,26 +45,26 @@ const Navbar = () => {
                 <div className="flex items-center justify-between h-20">
                     {/* Logo and Brand Name */}
                     <div className="flex-shrink-0">
-                        <a href="/" className="flex items-center gap-3">
+                        <Link to="/" className="flex items-center gap-3">
                             <LogoIcon />
                             <span className="text-white text-xl font-bold">BlockEstate</span>
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex md:items-center md:space-x-8">
                         {navLinks.map((link) => (
-                            <a key={link} href="#" className="text-gray-300 hover:bg-gray-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                                {link}
-                            </a>
+                            <Link key={link.name} to={link.path} className="text-gray-300 hover:bg-gray-800/50 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                {link.name}
+                            </Link>
                         ))}
                     </div>
 
                     {/* Desktop Contact Button */}
                     <div className="hidden md:block">
-                        <a href="#" className="bg-violet-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-violet-700 transition-colors">
+                        <Link to="/contact" className="bg-violet-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-violet-700 transition-colors">
                             Contact Us
-                        </a>
+                        </Link>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -81,13 +87,17 @@ const Navbar = () => {
                         className="md:hidden fixed inset-0 bg-black bg-opacity-90 backdrop-blur-sm flex flex-col items-center justify-center space-y-8"
                     >
                         {navLinks.map((link) => (
-                            <motion.a variants={linkVariants} key={link} href="#" className="text-gray-300 hover:text-white text-3xl font-semibold">
-                                {link}
-                            </motion.a>
+                            <motion.div variants={linkVariants} key={link.name}>
+                                <Link to={link.path} onClick={() => setIsMenuOpen(false)} className="text-gray-300 hover:text-white text-3xl font-semibold">
+                                    {link.name}
+                                </Link>
+                            </motion.div>
                         ))}
-                        <motion.a variants={linkVariants} href="#" className="bg-violet-600 text-white px-6 py-3 rounded-md text-lg font-medium text-center mt-4">
-                            Contact Us
-                        </motion.a>
+                        <motion.div variants={linkVariants}>
+                            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="bg-violet-600 text-white px-6 py-3 rounded-md text-lg font-medium text-center mt-4">
+                                Contact Us
+                            </Link>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
