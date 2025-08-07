@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useProperties } from '../../context/PropertyContext';
+import { motion, AnimatePresence } from 'framer-motion'; // <-- Import animation libraries
 
 // --- SVG Icons for property details ---
 const BedIcon = () => (
@@ -27,11 +30,13 @@ const RightArrowIcon = () => (
 const PropertyCard = ({ property }) => (
     <div className="bg-[#181818] rounded-2xl overflow-hidden group transition-all duration-300 hover:shadow-2xl hover:shadow-violet-800/20">
         <div className="overflow-hidden">
-            <img src={property.imageUrl} alt={property.title} className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" />
+            {/* Use the first image from the images array */}
+            <img src={property.images[0]} alt={property.title} className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500" />
         </div>
         <div className="p-6 space-y-4">
             <h3 className="text-2xl font-semibold text-white">{property.title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">{property.description} <a href="#" className="text-violet-400 hover:underline">Read More</a></p>
+            {/* Use Link for navigation */}
+            <p className="text-gray-400 text-sm leading-relaxed">{property.description.substring(0, 100)}... <Link to={`/properties/${property.id}`} className="text-violet-400 hover:underline">Read More</Link></p>
             
             {/* Property Details */}
             <div className="flex items-center space-x-6 text-gray-400 text-sm border-t border-gray-800 pt-4">
@@ -46,9 +51,10 @@ const PropertyCard = ({ property }) => (
                     <p className="text-xs text-gray-500">Price</p>
                     <p className="text-xl font-bold text-white">{property.price}</p>
                 </div>
-                <a href="#" className="px-5 py-2 bg-violet-600 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 transition-colors">
+                {/* Use Link for navigation */}
+                <Link to={`/properties/${property.id}`} className="px-5 py-2 bg-violet-600 text-white text-sm font-semibold rounded-lg hover:bg-violet-700 transition-colors">
                     View Property Details
-                </a>
+                </Link>
             </div>
         </div>
     </div>
@@ -57,32 +63,37 @@ const PropertyCard = ({ property }) => (
 
 // --- Main Featured Properties Section Component ---
 const FeaturedProperties = () => {
-    const properties = [
-        {
-            imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
-            title: "Seaside Serenity Villa",
-            description: "A stunning 4-bedroom, 3-bathroom villa in a peaceful suburban neighborhood.",
-            bedrooms: 4,
-            bathrooms: 3,
-            price: "$550,000"
-        },
-        {
-            imageUrl: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop",
-            title: "Metropolitan Haven",
-            description: "A chic and fully-furnished 2-bedroom apartment with panoramic city views.",
-            bedrooms: 2,
-            bathrooms: 2,
-            price: "$550,000"
-        },
-        {
-            imageUrl: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop",
-            title: "Rustic Retreat Cottage",
-            description: "An elegant 3-bedroom, 2.5-bathroom townhouse in a gated community.",
-            bedrooms: 3,
-            bathrooms: 2.5,
-            price: "$550,000"
+    const { properties } = useProperties();
+    const [currentPage, setCurrentPage] = useState(0);
+    
+    const propertiesArray = Object.values(properties);
+    const propertiesPerPage = 3;
+    const totalPages = Math.ceil(propertiesArray.length / propertiesPerPage);
+
+    const handleNext = () => {
+        setCurrentPage((prev) => (prev + 1) % totalPages);
+    };
+
+    const handlePrev = () => {
+        setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
+    };
+
+    const startIndex = currentPage * propertiesPerPage;
+    const currentProperties = propertiesArray.slice(startIndex, startIndex + propertiesPerPage);
+
+    // Animation variants for the container and cards
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.15 }
         }
-    ];
+    };
+
+    const cardVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: { y: 0, opacity: 1 }
+    };
 
     return (
         <section className="bg-black text-white py-20 sm:py-10">
@@ -101,26 +112,45 @@ const FeaturedProperties = () => {
                             Explore our handpicked selection of featured properties. Each listing offers a glimpse into exceptional homes and investments available through BlockEstate. Click "View Details" for more information.
                         </p>
                     </div>
-                    <a href="#" className="px-5 py-2 border border-gray-600 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap">
+                    <Link to="/properties" className="px-5 py-2 border border-gray-600 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap">
                         View All Properties
-                    </a>
+                    </Link>
                 </div>
 
-                {/* Properties Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {properties.map((prop, index) => (
-                        <PropertyCard key={index} property={prop} />
-                    ))}
-                </div>
+                {/* Properties Grid with Animation */}
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentPage} // This key tells AnimatePresence to animate when the page changes
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        exit={{ opacity: 0 }}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                    >
+                        {currentProperties.map((prop) => (
+                            <motion.div key={prop.id} variants={cardVariants}>
+                                <PropertyCard property={prop} />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                </AnimatePresence>
 
                 {/* Pagination Controls */}
                 <div className="mt-16 pt-8 border-t border-gray-800 flex justify-between items-center">
-                    <p className="text-gray-400 font-medium">01 <span className="text-gray-600">of 10</span></p>
+                    <p className="text-gray-400 font-medium">
+                        {String(startIndex + 1).padStart(2, '0')} <span className="text-gray-600">of {String(propertiesArray.length).padStart(2, '0')}</span>
+                    </p>
                     <div className="flex items-center gap-2">
-                        <button className="p-2 rounded-full border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                        <button 
+                            onClick={handlePrev}
+                            className="p-2 rounded-full border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <LeftArrowIcon />
                         </button>
-                        <button className="p-2 rounded-full border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors">
+                        <button 
+                            onClick={handleNext}
+                            className="p-2 rounded-full border border-gray-700 text-gray-400 hover:bg-gray-800 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <RightArrowIcon />
                         </button>
                     </div>

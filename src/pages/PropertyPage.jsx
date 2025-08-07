@@ -4,6 +4,7 @@ import Navbar from '../components/home/Navbar';
 import PropertySearch from '../components/property/PropertySearch'; // <-- Import it
 import FeaturedProperties from '../components/property/FeaturedProperties';
 import Footer from '../components/home/Footer';
+import AddPropertyCTA from '../components/property/AddPropertyCTA';
 
 const PropertyPage = () => {
   return (
@@ -13,6 +14,7 @@ const PropertyPage = () => {
         <PropertySearch /> {/* <-- Add it here */}
         {/* You can add the property listings grid below this section */}
         <FeaturedProperties/>
+        <AddPropertyCTA/>
         <Footer/>
       </main>
     </div>
