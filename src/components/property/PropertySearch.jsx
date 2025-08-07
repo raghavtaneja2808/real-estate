@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // --- SVG Icons ---
@@ -70,15 +71,17 @@ const FilterDropdown = ({ icon, label, options, selectedValue, isOpen, onToggle,
 
 
 // --- Main Property Search Component ---
-const PropertySearch = () => {
+const PropertySearch = ({ onSearch }) => {
+    const navigate = useNavigate();
     const [openFilter, setOpenFilter] = useState(null);
     const [selectedFilters, setSelectedFilters] = useState({});
+    const [searchTerm, setSearchTerm] = useState("");
 
     const filters = [
-        { icon: <LocationIcon />, label: "Location", options: ["New York, NY", "Miami, FL", "Los Angeles, CA", "Houston, TX"] },
-        { icon: <PropertyTypeIcon />, label: "Property Type", options: ["House", "Apartment", "Villa", "Condo"] },
-        { icon: <PriceIcon />, label: "Pricing Range", options: ["$100k - $500k", "$500k - $1M", "$1M - $5M", "$5M+"] },
-        { icon: <SizeIcon />, label: "Property Size", options: ["< 1000 sqft", "1000 - 2000 sqft", "2000 - 4000 sqft", "> 4000 sqft"] },
+        { icon: <LocationIcon />, label: "Location", options: ["New York, NY", "Miami, FL", "Los Angeles, CA", "Houston, TX", "Aspen, Colorado"] },
+        { icon: <PropertyTypeIcon />, label: "Property Type", options: ["House", "Apartment", "Villa", "Condo", "Chalet", "Loft"] },
+        { icon: <PriceIcon />, label: "Pricing Range", options: ["$0 - $1M", "$1M - $2M", "$2M - $3M", "$3M+"] },
+        { icon: <SizeIcon />, label: "Property Size", options: ["< 2000 sqft", "2000 - 3000 sqft", "3000 - 4000 sqft", "> 4000 sqft"] },
         { icon: <BuildYearIcon />, label: "Build Year", options: ["After 2020", "2010 - 2020", "2000 - 2010", "Before 2000"] }
     ];
 
@@ -87,8 +90,21 @@ const PropertySearch = () => {
     };
 
     const handleSelect = (label, option) => {
-        setSelectedFilters(prev => ({ ...prev, [label]: option }));
+        const newFilters = { ...selectedFilters, [label]: option };
+        setSelectedFilters(newFilters);
         setOpenFilter(null);
+    };
+
+    const handleSearchClick = () => {
+        const queryParams = new URLSearchParams();
+        if (searchTerm) {
+            queryParams.append('q', searchTerm);
+        }
+        for (const [key, value] of Object.entries(selectedFilters)) {
+            queryParams.append(key, value);
+        }
+        
+        navigate(`/search?${queryParams.toString()}`);
     };
 
     return (
@@ -108,9 +124,14 @@ const PropertySearch = () => {
                         <input 
                             type="text"
                             placeholder="Search For A Property"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             className="w-full bg-[#181818] border border-gray-700 rounded-lg py-3 pl-6 sm:pr-48 text-base sm:text-lg focus:outline-none focus:ring-2 focus:ring-violet-500"
                         />
-                        <button className="w-full sm:w-auto sm:absolute sm:right-2 sm:top-1/2 sm:-translate-y-1/2 flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors">
+                        <button 
+                            onClick={handleSearchClick}
+                            className="w-full sm:w-auto sm:absolute sm:right-2 sm:top-1/2 sm:-translate-y-1/2 flex items-center justify-center gap-2 px-6 py-3 bg-violet-600 text-white font-semibold rounded-lg hover:bg-violet-700 transition-colors"
+                        >
                             <SearchIcon />
                             <span className="sm:inline">Find Property</span>
                         </button>

@@ -51,7 +51,7 @@ const initialProperties = {
         address: "New York, New York",
         price: "$3,500,000",
         images: [
-            "https://images.unsplash.com/photo-1613553425973-1d6a45a6898d?q=80&w=1974&auto=format&fit=crop",
+            "https://img.peerspace.com/image/upload/f_auto,q_auto,dpr_auto,w_3840/lmx6xncxocsrjtuvwtjj",
             "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop",
         ],
